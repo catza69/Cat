@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Baccarat Predictor</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #111; color: #fff; }
+    input[type="text"] { padding: 10px; width: 100%; margin-bottom: 10px; font-size: 16px; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 10px; }
+    .result { margin-top: 20px; font-size: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Baccarat AI Predictor (Mobile)</h2>
+  <p>ใส่ผลย้อนหลัง (เช่น: P,B,B,P,P,B)</p>
+  
+<div>
+  <button onclick="addResult('P')" style="background-color:#007bff;color:white;padding:10px 20px;margin:5px;font-size:16px;border:none;border-radius:6px;">P</button>
+  <button onclick="addResult('B')" style="background-color:#dc3545;color:white;padding:10px 20px;margin:5px;font-size:16px;border:none;border-radius:6px;">B</button>
+  <button onclick="addResult('T')" style="background-color:#28a745;color:white;padding:10px 20px;margin:5px;font-size:16px;border:none;border-radius:6px;">T</button>
+  <button onclick="clearHistory()" style="background-color:#6c757d;color:white;padding:10px 20px;margin:5px;font-size:16px;border:none;border-radius:6px;">ล้าง</button>
+</div>
+<p id="historyDisplay" style="margin-top: 10px; font-size: 18px;">ผลย้อนหลัง: </p>
+
+  <button onclick="predictNext()">ทำนายผลถัดไป</button>
+  <div class="result" id="prediction"></div>
+
+  
+<script>
+  let history = [];
+
+  function addResult(value) {
+    history.push(value);
+    document.getElementById("historyDisplay").innerText = "ผลย้อนหลัง: " + history.join(',');
+    predictNext();
+  }
+
+  function clearHistory() {
+    history = [];
+    document.getElementById("historyDisplay").innerText = "ผลย้อนหลัง: ";
+    document.getElementById("prediction").innerText = "";
+  }
+
+    function predictNext() {
+      const results = history;
+      const results = input.split(',').filter(c => c === 'P' || c === 'B');
+      let prediction = "ไม่สามารถทำนายได้";
+
+      if (results.length < 3) {
+        prediction = "กรุณาใส่อย่างน้อย 3 ตา";
+      } else {
+        const last = results.slice(-3).join('');
+
+        if (/^PBP$|^BPB$/.test(last)) prediction = "ปิงปอง (ตาถัดไป: " + (results.at(-1) === 'P' ? 'B' : 'P') + ")";
+        else if (results.at(-1) === results.at(-2) && results.at(-2) === results.at(-3)) prediction = `มังกร (${results.at(-1)} ต่อ)`;
+        else if (results.at(-1) === results.at(-2)) prediction = `สองตัวติด (${results.at(-1)}), อาจจะตัดเป็นฝั่งตรงข้าม`;
+        else prediction = "แนวโน้มไม่ชัดเจน ลองใส่ข้อมูลเพิ่ม";
+      }
+
+      document.getElementById("prediction").innerText = prediction;
+    }
+  </script>
+
+
+<script>
+  let history = [];
+
+  function addResult(value) {
+    history.push(value);
+    document.getElementById("historyDisplay").innerText = "ผลย้อนหลัง: " + history.join(',');
+    predictNext();
+  }
+
+  function clearHistory() {
+    history = [];
+    document.getElementById("historyDisplay").innerText = "ผลย้อนหลัง: ";
+    document.getElementById("prediction").innerText = "";
+  }
+
+  function predictNext() {
+    const results = history;
+    const results = input.split(',').filter(c => ['P', 'B', 'T'].includes(c));
+    let prediction = "ไม่สามารถทำนายได้";
+
+    if (results.length < 4) {
+      prediction = "กรุณาใส่อย่างน้อย 4 ตา";
+    } else {
+      const patterns = {};
+      for (let i = 0; i < results.length - 4; i++) {
+        const key = results.slice(i, i + 4).join(',');
+        const next = results[i + 4];
+        if (!patterns[key]) patterns[key] = { P: 0, B: 0, T: 0 };
+        patterns[key][next]++;
+      }
+
+      const last4 = results.slice(-4).join(',');
+      if (patterns[last4]) {
+        const freq = patterns[last4];
+        const maxKey = Object.entries(freq).sort((a, b) => b[1] - a[1])[0][0];
+        prediction = `AI ทำนาย: ตาถัดไปน่าจะออก ${maxKey} (จากรูปแบบ ${last4})`;
+      } else {
+        prediction = "ไม่พบรูปแบบซ้ำ ลองใส่ข้อมูลเพิ่ม";
+      }
+    }
+
+    document.getElementById("prediction").innerText = prediction;
+  }
+</script>
+
+
+<script>
+  let history = [];
+
+  function addResult(value) {
+    history.push(value);
+    document.getElementById("historyDisplay").innerText = "ผลย้อนหลัง: " + history.join(',');
+    predictNext();
+  }
+
+  function clearHistory() {
+    history = [];
+    document.getElementById("historyDisplay").innerText = "ผลย้อนหลัง: ";
+    document.getElementById("prediction").innerText = "";
+  }
+
+  let correct = 0;
+  let total = 0;
+  let lastPrediction = null;
+
+  function predictNext() {
+    const results = history;
+    const results = input.split(',').filter(c => ['P', 'B', 'T'].includes(c));
+    let prediction = "ไม่สามารถทำนายได้";
+
+    if (results.length < 5) {
+      prediction = "กรุณาใส่อย่างน้อย 5 ตา";
+    } else {
+      const patterns = {};
+      for (let i = 0; i < results.length - 4; i++) {
+        const key = results.slice(i, i + 4).join(',');
+        const next = results[i + 4];
+        if (!patterns[key]) patterns[key] = { P: 0, B: 0, T: 0 };
+        patterns[key][next]++;
+      }
+
+      const last4 = results.slice(-5, -1).join(',');
+      const actual = results.at(-1);
+
+      if (patterns[last4]) {
+        const freq = patterns[last4];
+        const maxKey = Object.entries(freq).sort((a, b) => b[1] - a[1])[0][0];
+        prediction = `AI ทำนาย: ตาถัดไปน่าจะออก ${maxKey} (จากรูปแบบ ${last4})`;
+        lastPrediction = maxKey;
+
+        total++;
+        if (actual === lastPrediction) correct++;
+      } else {
+        prediction = "ไม่พบรูปแบบซ้ำ ลองใส่ข้อมูลเพิ่ม";
+      }
+    }
+
+    const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
+    document.getElementById("prediction").innerText = prediction + `\nความแม่นยำ: ${accuracy}% (${correct}/${total})`;
+  }
+</script>
+</body>
+
+
+</html>
